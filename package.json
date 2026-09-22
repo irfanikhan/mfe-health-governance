@@ -10,12 +10,22 @@
     "apps/*",
     "packages/*"
   ],
+  "devDependencies": {
+    "@eslint/js": "9.39.4",
+    "eslint": "9.39.4",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.59.3"
+  },
   "scripts": {
     "dev": "npm run dev --workspace @pulseboard/web",
     "start": "npm run start --workspace @pulseboard/web",
-    "lint": "npm run lint --workspace @pulseboard/web",
-    "typecheck": "npm run typecheck --workspace @pulseboard/web",
-    "test": "npm run test --workspace @pulseboard/web",
-    "build": "npm run build --workspace @pulseboard/web"
+    "lint": "npm run lint --workspace @pulseboard/db && npm run lint --workspace @pulseboard/web",
+    "typecheck": "npm run typecheck --workspace @pulseboard/db && npm run typecheck --workspace @pulseboard/web",
+    "test": "npm run test --workspace @pulseboard/db && npm run test --workspace @pulseboard/web",
+    "build": "npm run build --workspace @pulseboard/db && npm run build --workspace @pulseboard/web",
+    "db:generate": "npm run db:generate --workspace @pulseboard/db",
+    "db:migrate": "npm run db:migrate --workspace @pulseboard/db",
+    "db:check": "npm run db:check --workspace @pulseboard/db",
+    "db:health": "npm run build --workspace @pulseboard/db && npm run db:health --workspace @pulseboard/db"
   }
 }

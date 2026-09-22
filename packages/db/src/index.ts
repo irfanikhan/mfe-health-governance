@@ -1,0 +1,4 @@
+export { createDatabase } from "./client.js";
+export type { Database } from "./client.js";
+export { readDatabaseConfig } from "./config.js";
+export type { DatabaseConfig } from "./config.js";

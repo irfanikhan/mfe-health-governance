@@ -42,6 +42,22 @@ The HTML test starts the production server, so build before running it. Root scr
 
 - `apps/web/` — existing Next.js governance dashboard and its server-rendering test
 - `tsconfig.base.json` — shared strict TypeScript settings for workspaces
-- `packages/` — reserved by the npm workspace pattern for future Phase 2 packages; packages are added when they contain implementation
+- `packages/db/` — PostgreSQL access and migration tooling
+- `packages/*` — workspace pattern for later Phase 2 packages, added when they contain implementation
 
 The root `package.json` uses npm workspaces (`apps/*` and `packages/*`). The root lockfile remains the single dependency lockfile. New packages should declare their own dependencies and extend the shared TypeScript configuration where appropriate.
+
+## Database foundation
+
+`packages/db` is the PostgreSQL access boundary. [ADR 0001](docs/adr/0001-postgresql-access.md) records the Drizzle ORM, `pg`, and Drizzle Kit choice. The package has no application tables yet; PB-003 will add the first persistence schema.
+
+Set `DATABASE_URL` to a local or CI PostgreSQL database URL. `.env.example` shows the format; keep real credentials in an ignored local file or your environment. Database commands read the process environment, so export the variable before running them. The Next.js app still uses Phase 1 mock data and does not require a database to render.
+
+```bash
+npm run db:health    # connect and run SELECT 1
+npm run db:generate  # generate reviewable SQL after a schema change
+npm run db:check     # check migration history for conflicts
+npm run db:migrate   # apply committed migrations to the configured database
+```
+
+Review generated SQL in `packages/db/migrations/` before applying it. CI can run `npm run db:check` without database credentials and run `npm run db:health` and `npm run db:migrate` when a disposable PostgreSQL service and `DATABASE_URL` are available. No schema migration exists until a persistence table is defined.
