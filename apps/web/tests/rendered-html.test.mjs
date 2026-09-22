@@ -2,6 +2,9 @@ import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
 import net from "node:net";
 import test from "node:test";
+import { createRequire } from "node:module";
+
+const require = createRequire(import.meta.url);
 
 async function availablePort() {
   return new Promise((resolve, reject) => {
@@ -35,7 +38,7 @@ test("server-renders the MFE governance dashboard", async () => {
   const logs = [];
   const child = spawn(
     process.execPath,
-    ["node_modules/next/dist/bin/next", "start", "-H", "127.0.0.1", "-p", String(port)],
+    [require.resolve("next/dist/bin/next"), "start", "-H", "127.0.0.1", "-p", String(port)],
     { cwd: new URL("..", import.meta.url), stdio: ["ignore", "pipe", "pipe"] },
   );
   child.stdout.on("data", (chunk) => logs.push(chunk.toString()));
